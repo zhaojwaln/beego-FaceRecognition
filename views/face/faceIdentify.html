@@ -1,0 +1,89 @@
+<html>
+    
+    <body>
+        <div style="height:300px;">
+            <div style="float:left;margin-right:100px;">
+                <div style="width:400px;height:300px;">
+                    <img id="imageone" src="" style="width:100%;height:100%;" />
+                </div>
+                <div>
+                    <input style="display:block;" type="file" id="identifyone" name="picture1" />
+                </div>
+            </div>
+            <div style="float:left;">
+                <div style="width:400px;height:300px;">
+                    <img id="imagetwo" src="" style="width:100%;height:100%;" />
+                </div>
+            </div>
+            <div style="width:400px;height:350px;"></div>
+            <div>
+                <input type="button" onclick="uploadImage();" value="提交"/>
+            </div>
+        </div>
+    
+        <div id="div"></div>
+        <script>
+            var imageone = '';
+            document.getElementById('identifyone').onchange = function () {
+                if (!this.files || !this.files[0]) {
+                    return;
+                }
+                var reader = new FileReader();
+                reader.onload = function (evt) {
+                    document.getElementById('imageone').src = evt.target.result;
+                    imageone = evt.target.result;
+                }
+                reader.readAsDataURL(this.files[0]);
+            }
+
+            function uploadImage() {
+    
+                url = "face/faceidentify"
+                var data = {
+                    ids: 1,
+                    pic: imageone
+                };
+    
+                $.messager.progress({
+                    title: '系统提示',
+                    msg: '正在检测，请稍后。。。',
+                });
+                $.ajax({
+                    url: url,
+                    data: data,
+                    type: 'POST',
+                    dataType: 'json'
+                }).success(function (ret) {
+                    if (!ret) {
+                        $.messager.alert('系统提示', '检测失败！', 'error');
+                        return;
+                    }
+
+                    if (!ret.result && ret.error_msg) {
+                        msg = ret.error_msg;
+                    }
+                    else{
+                        var msg = '';
+                        secondret = ret.result[0];
+                        msg = [
+                            '相似度打分:', parseInt(secondret.scores),
+                            '<br/>',
+                            '用户ID:', secondret.uid,
+                            '<br/>',
+                            '用户信息:', secondret.user_info
+                        ].join('');
+
+                        document.getElementById('imagetwo').setAttribute('src',ret.result_pic);
+                    }
+    
+                    $.messager.alert('操作提示', msg, 'info');
+                }).error(function () {
+                    $.messager.alert('操作提示', '失败');
+                }).complete(function () {
+                    $.messager.progress('close');
+                });
+            }
+        </script>
+    </body>
+    
+    </html>
