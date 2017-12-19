@@ -12,11 +12,11 @@
 
 ## 功能截图
 - 人脸检测
-![image]
+![image]https://github.com/zhaojwaln/beego-FaceRecognition/blob/master/image/20171219104227.png
 - 人脸识别
-![image]
+![image]https://github.com/zhaojwaln/beego-FaceRecognition/blob/master/image/20171219104528.png
 - 人脸比对
-![image]
+![image]https://github.com/zhaojwaln/beego-FaceRecognition/blob/master/image/20171219104319.png
 
 ## 后续功能
 - 用户管理
